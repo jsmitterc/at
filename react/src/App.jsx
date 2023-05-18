@@ -6,9 +6,11 @@ export default function Example() {
 
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("");
 
   const submit = e => {
     e.preventDefault()
+    setMessage("Loading...")
     fetch(`http://127.0.0.1:8000/api/${search}`, {
       method: 'GET',
     })
@@ -17,6 +19,9 @@ export default function Example() {
       const data = await response.json();
       console.log(data);
       setProducts(data.data);
+      if (data.data.length === 0 ){
+        setMessage("Products not found")
+      }
     }})
   }
 
@@ -78,7 +83,7 @@ export default function Example() {
               </div>
             </li>
           ))}
-          <p className="text-lg leading-6 text-gray-900">{ products == 0 ? "No results found" : "" }</p>
+          <p className="text-lg leading-6 text-gray-900">{ products == 0 ? message : "" }</p>
         </ul>
       </div>
     </>
